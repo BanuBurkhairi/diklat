@@ -32,7 +32,7 @@ class TrainingController extends Controller
     public function userTrainings()
     {
         // Tampilkan semua pelatihan milik pengguna yang terautentikasi
-        $trainings = Training::where('user_id', Auth::id())->get();
+        $trainings = Training::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         return view('trainings.show', compact('trainings'));
     }
 
@@ -41,7 +41,7 @@ class TrainingController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'duration' => 'required|integer|min:1',
-            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // Pastikan ukuran sesuai validasi
         ]);
 
         $training = Training::create([
@@ -55,22 +55,13 @@ class TrainingController extends Controller
                 $file = $request->file('certificate');
                 $filename = Auth::id() . '_' . $training->id . '.' . $file->getClientOriginalExtension();
                 $path = public_path('sertifikat');
-        
+
                 if (!file_exists($path)) {
                     mkdir($path, 0755, true);
                 }
-        
-                // Debugging
-                Log::info('Preparing to move file', [
-                    'original_name' => $file->getClientOriginalName(),
-                    'filename' => $filename,
-                    'path' => $path,
-                    'full_path' => $path . '/' . $filename,
-                ]);
-        
+
                 $file->move($path, $filename);
-        
-                // Periksa apakah file berhasil dipindahkan
+
                 if (file_exists($path . '/' . $filename)) {
                     $training->certificate_url = '/sertifikat/' . $filename;
                     $training->save();
@@ -78,11 +69,12 @@ class TrainingController extends Controller
                     throw new \Exception('Failed to move uploaded file.');
                 }
             } catch (\Exception $e) {
+                Log::error('File upload error', ['error' => $e->getMessage()]);
                 return redirect()->back()->withErrors(['certificate' => 'Failed to upload certificate: ' . $e->getMessage()])->withInput();
             }
         }
-        
 
         return redirect()->route('trainings.index')->with('success', 'Training added successfully.');
     }
+
 }

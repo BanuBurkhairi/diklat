@@ -37,7 +37,7 @@
             </div>
             <div class="mb-3">
                 <div class="form-label">Upload Sertifikat</div>
-                <input type="file" class="form-control" />
+                <input name="certificate" type="file" class="form-control" />
             </div>
         </div>
         <div class="card-footer text-end">
