@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RekapController;
 
 // Rute default untuk mengarahkan ke dashboard
 Route::get('/', function () {
@@ -26,4 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [TrainingController::class, 'index'])->name('dashboard');
     Route::get('/trainings/user', [TrainingController::class, 'userTrainings'])->name('trainings.user');
     Route::resource('trainings', TrainingController::class);
+    Route::get('/admin/rekap', [RekapController::class, 'index'])->name('rekap.index');
 });
+

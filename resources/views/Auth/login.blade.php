@@ -56,7 +56,7 @@
                         </select>
                     </div>
                     <div class="input-group input-group-flat">
-                        <input name="password" type="password" class="form-control"  placeholder="Masukkan NIP BPS"  autocomplete="off">
+                        <input name="password" type="password" class="form-control"  placeholder="Masukkan NIP BPS (NIP Lama)"  autocomplete="off">
                     </div>
                 </div>
                 <div class="card-footer text-center">

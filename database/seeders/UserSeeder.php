@@ -118,11 +118,5 @@ class UserSeeder extends Seeder
             'password' => bcrypt('340062379'),
             'profile_photo' => '/img/profil/340062379.jpg',
         ]);
-        User::create([
-            'id' => '1278',
-            'name' => 'BPS Kota Gunungsitoli',
-            'password' => bcrypt('bps1278'),
-            'profile_photo' => '',
-        ]);
     }
 }

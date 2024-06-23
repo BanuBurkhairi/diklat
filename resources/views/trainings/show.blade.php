@@ -30,7 +30,7 @@
         </div> --}}
       </div>
     </div>
-    <div class="col-auto ms-auto">
+    <div class="col-auto ms-auto d-print-none">
       <div class="btn-list">
         <a href="{{ route('dashboard') }}" class="btn">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-back-up"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 14l-4 -4l4 -4" /><path d="M5 10h11a4 4 0 1 1 0 8h-1" /></svg>
@@ -58,12 +58,27 @@
                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-certificate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 15m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" /><path d="M6 9l12 0" /><path d="M6 12l3 0" /><path d="M6 15l2 0" /></svg>
                                 Lihat
                             </a>
+                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                              Actions
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-arrow">
+                              <a class="dropdown-item" href="{{ route('trainings.edit', $training->id) }}">
+                                Edit
+                              </a>
+                              <form action="{{ route('trainings.destroy', $training->id) }}" method="POST" style="display:inline;" class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="dropdown-item">
+                                  Hapus
+                                </button>
+                              </form>
+                            </div>                            
                         @else
                             No Certificate
                         @endif
                     </div>
                     <h4>{{ $training->title }}</h4>
-                    <p class="text-muted">{{ $training->duration }} Jam Pelajaran (JP)</p>
+                    <p class="text-muted">{{ $training->duration }} Jam Pelajaran (JP) || {{ $training->tanggal_pelatihan }}</p>
                 </div>
             </div>
         </li>
@@ -72,3 +87,19 @@
 </div>
 
 @endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteForms = document.querySelectorAll('form.delete-form');
+
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                const confirmed = confirm('Apakah Anda yakin ingin menghapus item ini?');
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+</script>

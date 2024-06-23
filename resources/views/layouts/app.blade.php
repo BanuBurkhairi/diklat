@@ -27,11 +27,11 @@
     <div class="page">
         <header class="navbar navbar-expand-md d-print-none" >
             <div class="container-xl">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+              {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-              </button>
+              </button> --}}
               <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                <a href=".">
+                <a href="{{ route('dashboard') }}">
                   <img src="{{ asset('img/brand.png') }}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
                 </a>
               </h1>
@@ -56,7 +56,16 @@
                     </div>
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="#" class="dropdown-item">Profil</a>
+                    @php
+                        $allowedUserIds = [340060555, 340057574, 340017897, 340057217];
+                    @endphp
+                    
+                    @if (in_array(Auth::id(), $allowedUserIds))
+                        <h6 class="dropdown-header">Admin</h6>
+                        <a class="dropdown-item" href="{{ route('rekap.index',['month' => \Carbon\Carbon::now()->format('Y-m')]) }}">Rekap Kantor</a>
+                        <div class="dropdown-divider"></div>
+                    @endif
+                    {{-- <a href="#" class="dropdown-item">Profil</a> --}}
                     <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                       @csrf

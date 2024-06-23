@@ -69,6 +69,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
+                <div class="d-flex">
+                    <h3 class="card-title">Jumlah Jam Pelajaran Per Pegawai</h3>
+                </div>
                 <div id="chart-tasks-overview"></div>
             </div>
         </div>
