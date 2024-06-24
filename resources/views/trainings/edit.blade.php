@@ -34,11 +34,24 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Jam Pelajaran (JP)</label>
-                <input type="number" class="form-control" name="duration" value="{{ old('title', $training->duration) }}">
+                <input type="number" class="form-control" name="duration" value="{{ old('duration', $training->duration) }}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Tanggal Pelatihan</label>
-                <input name="tanggal_pelatihan" type="date" class="form-control" value="{{ old('title', $training->tanggal_pelatihan) }}">
+                @if ($training->tanggal_mulai)
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <span class="form-hint">Tanggal Mulai</span>
+                            <input name="tanggal_mulai" type="date" class="form-control" value="{{ old('tanggal_mulai', $training->tanggal_mulai) }}">
+                        </div>
+                        <div class="col-6">
+                            <span class="form-hint">Tanggal Selesai</span>
+                            <input name="tanggal_pelatihan" type="date" class="form-control" value="{{ old('tanggal_pelatihan', $training->tanggal_pelatihan) }}">
+                        </div>
+                    </div>
+                @else
+                    <input name="tanggal_pelatihan" type="date" class="form-control" value="{{ old('tanggal_pelatihan', $training->tanggal_pelatihan) }}">
+                @endif
             </div>
             <div class="mb-3">
                 <div class="form-label">Upload Sertifikat</div>

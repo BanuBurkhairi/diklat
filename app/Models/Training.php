@@ -13,6 +13,7 @@ class Training extends Model
         'user_id',
         'title',
         'duration',
+        'tanggal_mulai',
         'tanggal_pelatihan',
         'certificate_url',
     ];

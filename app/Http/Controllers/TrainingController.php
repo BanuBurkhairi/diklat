@@ -41,8 +41,11 @@ class TrainingController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'duration' => 'required|integer|min:1',
-            'tanggal_pelatihan' => 'required|date',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_pelatihan' => 'required|date|after:tanggal_mulai',
             'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // Pastikan ukuran sesuai validasi
+        ], [
+            'tanggal_pelatihan.after' => 'Rentang tanggal pelatihan tidak sesuai, pastikan tanngal selesai adalah tanggal setelah tanggal mulai',
         ]);
 
         Log::info('Data diterima:', $validatedData);
@@ -51,6 +54,7 @@ class TrainingController extends Controller
             'user_id' => Auth::id(),
             'title' => $validatedData['title'],
             'duration' => $validatedData['duration'],
+            'tanggal_mulai' => $validatedData['tanggal_mulai'],
             'tanggal_pelatihan' => $validatedData['tanggal_pelatihan'],
         ]);
 
@@ -78,7 +82,7 @@ class TrainingController extends Controller
             }
         }
 
-        return redirect()->route('trainings.index')->with('success', 'Training added successfully.');
+        return redirect()->route('trainings.user')->with('success', 'Training added successfully.');
     }
 
     public function edit(Training $training)
@@ -91,13 +95,17 @@ class TrainingController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'duration' => 'required|integer|min:1',
-            'tanggal_pelatihan' => 'required|date',
-            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_pelatihan' => 'required|date|after:tanggal_mulai',
+            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // Pastikan ukuran sesuai validasi
+        ], [
+            'tanggal_pelatihan.after' => 'Rentang tanggal pelatihan tidak sesuai, pastikan tanngal selesai adalah tanggal setelah tanggal mulai',
         ]);
 
         $training->update([
             'title' => $validatedData['title'],
             'duration' => $validatedData['duration'],
+            'tanggal_mulai' => $validatedData['tanggal_mulai'],
             'tanggal_pelatihan' => $validatedData['tanggal_pelatihan'],
         ]);
 
@@ -125,7 +133,7 @@ class TrainingController extends Controller
             }
         }
 
-        return redirect()->route('trainings.index')->with('success', 'Training updated successfully.');
+        return redirect()->route('trainings.user')->with('success', 'Training updated successfully.');
     }
 
     public function destroy(Training $training)

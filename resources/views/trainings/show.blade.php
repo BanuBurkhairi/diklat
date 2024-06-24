@@ -78,7 +78,16 @@
                         @endif
                     </div>
                     <h4>{{ $training->title }}</h4>
-                    <p class="text-muted">{{ $training->duration }} Jam Pelajaran (JP) || {{ $training->tanggal_pelatihan }}</p>
+                    <p class="text-muted">
+                      {{ $training->duration }} Jam Pelajaran (JP) || 
+                      @if ($training->tanggal_mulai)
+                        {{ $training->tanggal_mulai }} s.d. {{ $training->tanggal_pelatihan }}
+                      @else
+                      {{ $training->tanggal_pelatihan }}
+                      @endif
+
+
+                    </p>
                 </div>
             </div>
         </li>
@@ -88,7 +97,7 @@
 
 @endsection
 
-@section('scripts')
+@section('skrip')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteForms = document.querySelectorAll('form.delete-form');

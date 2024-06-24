@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->integer('duration'); // Durasi dalam jam pelajaran
+            $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_pelatihan');
             $table->string('certificate_url')->nullable(); // URL sertifikat
             $table->timestamps();
