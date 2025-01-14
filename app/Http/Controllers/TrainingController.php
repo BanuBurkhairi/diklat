@@ -11,17 +11,28 @@ use Illuminate\Support\Facades\Storage;
 
 class TrainingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $currentYear = date('Y');
+        $selectedYear = $request->input('year', $currentYear);
+        $years = Training::selectRaw('YEAR(tanggal_pelatihan) as year')  
+        ->distinct()  
+        ->orderBy('year', 'desc')  
+        ->pluck('year');  
         // Ambil data pegawai dan jumlah JP mereka
-        $employees = User::with('trainings')->get()->map(function($user) {
-            return [
-                'name' => $user->name,
-                'jp' => $user->trainings->sum('duration'),
-            ];
+        $employees = User::with(['trainings' => function($query) use ($selectedYear) {  
+            $query->whereYear('tanggal_pelatihan', $selectedYear);  
+        }])->get()->map(function($user) {  
+            return [  
+                'name' => $user->name,  
+                'jp' => $user->trainings->sum('duration'),  
+            ];  
         });
+        
+        // Ambil Data Statistik per tahun 
+        $currentYearTrainings = Training::whereYear('tanggal_pelatihan', $selectedYear)->get();
 
-        return view('trainings.index', compact('employees'));
+        return view('trainings.index', compact('employees', 'years', 'selectedYear', 'currentYearTrainings'));
     }
 
     public function create()
@@ -29,11 +40,21 @@ class TrainingController extends Controller
         return view('trainings.create');
     }
 
-    public function userTrainings()
+    public function userTrainings(Request $request)
     {
+        $currentYear = date('Y');
+        $selectedYear = $request->input('year', $currentYear);
+        $years = Training::selectRaw('YEAR(tanggal_pelatihan) as year')  
+        ->distinct()  
+        ->orderBy('year', 'desc')  
+        ->pluck('year');
+
         // Tampilkan semua pelatihan milik pengguna yang terautentikasi
-        $trainings = Training::where('user_id', Auth::id())->orderBy('tanggal_pelatihan', 'desc')->get();
-        return view('trainings.show', compact('trainings'));
+        $trainings = Training::where('user_id', Auth::id())  
+        ->whereYear('tanggal_pelatihan', $selectedYear) // Filter berdasarkan tahun  
+        ->orderBy('tanggal_pelatihan', 'desc')  
+        ->get(); 
+        return view('trainings.show', compact('trainings', 'selectedYear', 'years'));
     }
 
     public function store(Request $request)

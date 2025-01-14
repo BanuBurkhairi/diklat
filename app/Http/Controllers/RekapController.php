@@ -13,43 +13,30 @@ class RekapController extends Controller
 {
     public function index(Request $request)
     {
-        $allowedUserIds = [340060555, 340057574, 340017897, 340057217];
-        
+        $allowedUserIds = [340060555, 340059736, 340057574, 340017897, 340057217];
+        $currentYear = date('Y');
+        $selectedYear = $request->input('year', $currentYear);
+        $years = Training::selectRaw('YEAR(tanggal_pelatihan) as year')  
+        ->distinct()  
+        ->orderBy('year', 'desc')  
+        ->pluck('year');
+
         //Cek apakah admin atau bukan
         if (in_array(Auth::id(), $allowedUserIds)) {
             $jumlahPegawai = User::count();
-            $jumlahJamPelajaran = Training::sum('duration'); // Asumsi ada kolom `jam_pelajaran` di tabel `trainings`
+            $jumlahJamPelajaran = Training::whereYear('tanggal_pelatihan', $selectedYear)->sum('duration');
             $persentaseJamPelajaran = $jumlahJamPelajaran / ($jumlahPegawai * 20) * 100;
             
             //Dashboard Total
-            $employees = User::with('trainings')->get()->map(function($user) {
-                return [
-                    'name' => $user->name,
-                    'jp' => $user->trainings->sum('duration'),
-                ];
-            });
-
-            //Dashboard Bulanan
-            
-            $month = $request->month;
-            $startOfMonth = Carbon::parse($month . '-01')->startOfMonth()->format('Y-m-d');
-            $endOfMonth = Carbon::parse($month . '-01')->endOfMonth()->format('Y-m-d');
-
-            // Ambil data pelatihan sesuai bulan ini
-            $employes = User::with(['trainings' => function ($query) use ($startOfMonth, $endOfMonth) {
-                $query->whereBetween('tanggal_pelatihan', [$startOfMonth, $endOfMonth]);
-            }])->get()->map(function($user) use ($startOfMonth, $endOfMonth) {
-                $monthlyDuration = $user->trainings
-                    ->whereBetween('tanggal_pelatihan', [$startOfMonth, $endOfMonth])
-                    ->sum('duration');
-
-                return [
-                    'name' => $user->name,
-                    'jp' => $monthlyDuration,
-                ];
-            });
-
-            return view('rekap.index', compact('jumlahPegawai', 'jumlahJamPelajaran', 'persentaseJamPelajaran', 'employees', 'employes', 'month'));
+            $employees = User::with(['trainings' => function ($query) use ($selectedYear) {  
+                $query->whereYear('tanggal_pelatihan', $selectedYear);  
+            }])->get()->map(function($user) {  
+                return [  
+                    'name' => $user->name,  
+                    'jp' => $user->trainings->sum('duration'),  
+                ];  
+            }); 
+            return view('rekap.index', compact('jumlahPegawai', 'jumlahJamPelajaran', 'persentaseJamPelajaran', 'employees', 'years', 'selectedYear'));
         } else {
             return back();
         }

@@ -118,14 +118,14 @@
                                     <path
                                         d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 3.176 -10.215z"
                                         stroke-width="0" fill="currentColor" />
-                            </svg> oleh IPDS
+                            </svg> oleh BB
                         </li>
                       </ul>
                     </div>
                     <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                       <ul class="list-inline list-inline-dots mb-0">
                         <li class="list-inline-item">
-                          Copyright &copy; 2024
+                          Copyright &copy; 2024-2025
                           <a href="https://gunungsitolikota.bps.go.id" class="link-secondary">BPS Kota Gunungsitoli</a>
                         </li>
                       </ul>

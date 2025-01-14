@@ -35,24 +35,9 @@
                     <div class="mb-3">
                         <select name="user_id" type="text" class="form-select" id="select-users" value="">
                             <option value="">--Pilih Pegawai--</option>
-                            <option value="340017897">Muhammad Ervin Sugiar SST, M.Si.</option>
-                            <option value="340057217">Syukur Rahmat Putra Selamat Zai, SST</option>
-                            <option value="340014034">Totona Buulolo, S.E.</option>
-                            <option value="340016376">Motani Zebua, S.E.</option>
-                            <option value="340016375">Asran Lase, S.E.</option>
-                            <option value="340054518">Herman Syukur Zebua, S.E.</option>
-                            <option value="340054520">Idaman Jaya Zendrato, S.E.</option>
-                            <option value="340057165">Nonifili Febrianty Harefa, SST, M.SM.</option>
-                            <option value="340057445">Jurdkriswanti Lase, SST</option>
-                            <option value="340057574">Rosmeyanna Daeli, SST</option>
-                            <option value="340058186">Claudia Damaris Br Kaban, SST</option>
-                            <option value="340059736">Rica Purnama Sari Saragi, S.Tr.Stat.</option>
-                            <option value="340060555">Banu Burkhairi, S.Tr.Stat.</option>
-                            <option value="340061087">Fitria Cahyaningtyas, A.Md.Kb.N</option>
-                            <option value="340062043">Ruti Tryana Telaumbanua, S.Tr.Stat.</option>
-                            <option value="340061798">Fitri Noor Hikmah, S.Tr.Stat.</option>
-                            <option value="340062225">Rekha Novalina, A.Md.Stat.</option>
-                            <option value="340062379">Bill Van Ricardo Zalukhu, S.Tr.Stat.</option>
+                          @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                          @endforeach  
                         </select>
                     </div>
                     <div class="input-group input-group-flat">
